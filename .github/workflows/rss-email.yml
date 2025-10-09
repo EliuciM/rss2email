@@ -1,0 +1,57 @@
+name: RSS to Email
+
+on:
+  schedule:
+    - cron: "0 9 * * *"  # 每天 9 点
+  workflow_dispatch:      # 手动触发
+
+jobs:
+  send-rss:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 拉取仓库代码
+      - uses: actions/checkout@v4
+
+      # 设置 Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      # 安装 rss2email 和依赖
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install feedparser html2text
+          pip install .
+
+      # 配置 RSS（使用 Secrets）
+      - name: Configure rss2email
+        run: |
+          mkdir -p $HOME/.config
+          cp rss2email.cfg $HOME/.config/rss2email.cfg
+          sed -i "s|{{SMTP_USER}}|${{ secrets.SMTP_USER }}|g" $HOME/.config/rss2email.cfg
+          sed -i "s|{{SMTP_PASS}}|${{ secrets.SMTP_PASS }}|g" $HOME/.config/rss2email.cfg
+          sed -i "s|{{TO_EMAIL}}|${{ secrets.TO_EMAIL }}|g" $HOME/.config/rss2email.cfg
+
+      # 恢复 RSS 数据文件
+      - name: Restore RSS data
+        run: |
+          mkdir -p $HOME/.local/share
+          cp rss2email.json $HOME/.local/share/rss2email.json
+
+      # 运行 rss2email
+      - name: Run rss2email
+        env:
+          HOME: ${{ github.workspace }}
+        run: r2e run
+
+      # 提交更新后的 RSS 数据文件回仓库
+      - name: Commit updated RSS data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add rss2email.json
+          git commit -m "Update RSS data [skip ci]" || echo "No changes"
+          git push
