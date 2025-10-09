@@ -31,8 +31,8 @@ jobs:
         run: |
           mkdir -p $HOME/.config
           cp rss2email.cfg $HOME/.config/rss2email.cfg
-          sed -i "s|{{smtp-username}}|${{ secrets.SMTP_USER }}|g" $HOME/.config/rss2email.cfg
-          sed -i "s|{{smtp-password}}|${{ secrets.SMTP_PASS }}|g" $HOME/.config/rss2email.cfg
+          sed -i "s|{{SMTP_USER}}|${{ secrets.SMTP_USER }}|g" $HOME/.config/rss2email.cfg
+          sed -i "s|{{SMTP_PASS}}|${{ secrets.SMTP_PASS }}|g" $HOME/.config/rss2email.cfg
           cat $HOME/.config/rss2email.cfg
           SMTP_USER="${{ secrets.SMTP_USER }}"
           SMTP_PASS="${{ secrets.SMTP_PASS }}"
