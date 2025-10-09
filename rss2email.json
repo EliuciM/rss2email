@@ -1,1 +1,11 @@
-{}
+{
+  "version": 2,
+  "feeds": [
+    {
+      "name": "uncareers",
+      "etag": null,
+      "modified": null,
+      "seen": {}
+    }
+  ]
+}
