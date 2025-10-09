@@ -33,11 +33,7 @@ jobs:
           cp rss2email.cfg $HOME/.config/rss2email.cfg
           sed -i "s|{{SMTP_USER}}|${{ secrets.SMTP_USER }}|g" $HOME/.config/rss2email.cfg
           sed -i "s|{{SMTP_PASS}}|${{ secrets.SMTP_PASS }}|g" $HOME/.config/rss2email.cfg
-          cat $HOME/.config/rss2email.cfg
-          SMTP_USER="${{ secrets.SMTP_USER }}"
-          SMTP_PASS="${{ secrets.SMTP_PASS }}"
-          echo "SMTP_USER length: ${#SMTP_USER}"
-          echo "SMTP_PASS first char: ${SMTP_PASS:0:1}"
+          sed -i "s|{{TO_EMAIL}}|${{ secrets.TO_EMAIL }}|g" $HOME/.config/rss2email.cfg
 
 
       # 恢复 RSS 数据文件
@@ -55,8 +51,10 @@ jobs:
       # 提交更新后的 RSS 数据文件回仓库
       - name: Commit updated RSS data
         run: |
+          cp $HOME/.local/share/rss2email.json rss2email.json
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config -l
           git add rss2email.json
           git commit -m "Update RSS data [skip ci]" || echo "No changes"
           git push
