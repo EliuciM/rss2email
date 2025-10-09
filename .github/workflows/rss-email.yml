@@ -31,9 +31,11 @@ jobs:
         run: |
           mkdir -p $HOME/.config
           cp rss2email.cfg $HOME/.config/rss2email.cfg
+          cat $HOME/.config/rss2email.cfg
           sed -i "s|{{SMTP_USER}}|${{ secrets.SMTP_USER }}|g" $HOME/.config/rss2email.cfg
           sed -i "s|{{SMTP_PASS}}|${{ secrets.SMTP_PASS }}|g" $HOME/.config/rss2email.cfg
-          sed -i "s|{{TO_EMAIL}}|${{ secrets.TO_EMAIL }}|g" $HOME/.config/rss2email.cfg
+          echo "SMTP_USER length: ${#{{ secrets.SMTP_USER }}}"
+          echo "SMTP_PASS first char: ${{{ secrets.SMTP_PASS }}}"
 
       # 恢复 RSS 数据文件
       - name: Restore RSS data
