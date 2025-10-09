@@ -34,8 +34,11 @@ jobs:
           cat $HOME/.config/rss2email.cfg
           sed -i "s|{{SMTP_USER}}|${{ secrets.SMTP_USER }}|g" $HOME/.config/rss2email.cfg
           sed -i "s|{{SMTP_PASS}}|${{ secrets.SMTP_PASS }}|g" $HOME/.config/rss2email.cfg
-          echo "SMTP_USER length: ${#{{ secrets.SMTP_USER }}}"
-          echo "SMTP_PASS first char: ${{{ secrets.SMTP_PASS }}}"
+          SMTP_USER="${{ secrets.SMTP_USER }}"
+          SMTP_PASS="${{ secrets.SMTP_PASS }}"
+          echo "SMTP_USER length: ${#SMTP_USER}"
+          echo "SMTP_PASS first char: ${SMTP_PASS:0:1}"
+
 
       # 恢复 RSS 数据文件
       - name: Restore RSS data
