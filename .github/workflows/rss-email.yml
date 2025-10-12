@@ -42,14 +42,14 @@ jobs:
           mkdir -p $HOME/.local/share
           cp rss2email.json $HOME/.local/share/rss2email.json
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+      
       # 运行 rss2email
       - name: Run rss2email
         env:
             HOME: ${{ github.workspace }}
-        run: r2e run
-
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+        run: r2e run  
 
       # 提交更新后的 RSS 数据文件回仓库
       - name: Commit updated RSS data
