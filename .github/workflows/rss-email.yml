@@ -1,8 +1,8 @@
 name: RSS to Email
 
 on:
-  schedule:
-    - cron: "0 9 * * *"  # 每天 9 点
+  # schedule:
+  #   - cron: "0 9 * * *"  # 每天 9 点
   workflow_dispatch:      # 手动触发
 
 jobs:
